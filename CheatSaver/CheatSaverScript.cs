@@ -1,27 +1,29 @@
 ﻿using ThunderRoad;
 using System.IO;
 using Newtonsoft.Json;
+using UnityEngine;
+using CheatSaver;
 
-namespace CheatSaver
+namespace CheatSaverNomad
 {
-    public class CheatSaverScript : ThunderScript
+    public class CheatSaverScriptNomad : ThunderScript
     {
         private static string DebugFileName = FileManager.aaModPath + "/CheatSaver/DebugOptions.opt";
         private static DebugOptions debugOptions;
-        private bool isFlipped;
+        private bool isOpen = false;
 
         public override void ScriptLoaded(ModManager.ModData modData)
         {
             base.ScriptLoaded(modData);
             debugOptions = new DebugOptions();
             EventManager.onPossess += onPossessionEvent;
-            EventManager.onUnpossess += OnUnpossessionEvent;
         }
 
         private void onPossessionEvent(Creature creature, EventTime eventTime)
         {
             if (eventTime == EventTime.OnEnd)
             {
+                isOpen = false;
                 if (!File.Exists(DebugFileName))
                     SaveDebugSettings();
 
@@ -29,22 +31,25 @@ namespace CheatSaver
             }
         }
 
-        private void OnUnpossessionEvent(Creature creature, EventTime eventTime)
-        {
-            if (eventTime == EventTime.OnEnd)
-                isFlipped = false;
-        }
-
         public override void ScriptUpdate()
         {
             base.ScriptUpdate();
             if (Player.currentCreature != null)
             {
-                if (UIPlayerMenu.instance.IsShownToPlayer != isFlipped)
+                // I am forced to make this a variable b/c
+                // of the sheer intellect of other ppl
+                bool var1 = UIPlayerMenu.instance.IsShownToPlayer;
+
+                if (var1 && !isOpen)
+                    isOpen = true;
+
+                if (!var1 && isOpen)
                 {
-                    isFlipped = !isFlipped;
-                    if (!UIPlayerMenu.instance.IsShownToPlayer && DebugSettingsChanged())
+                    isOpen = false;
+                    if (DebugSettingsChanged())
+                    {
                         SaveDebugSettings();
+                    }
                 }
             }
         }
@@ -101,6 +106,7 @@ namespace CheatSaver
 
         private static void SaveDebugSettings()
         {
+            Debug.LogWarning("Saving settings!");
             debugOptions.invincibility = Player.invincibility;
             debugOptions.infiniteMana = Mana.infiniteMana;
             debugOptions.infiniteFocus = Mana.infiniteFocus;

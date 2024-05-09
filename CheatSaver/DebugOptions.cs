@@ -1,7 +1,7 @@
 ﻿using System;
 using ThunderRoad;
 
-namespace CheatSaver
+namespace CheatSaverNomad
 {
     [Serializable]
     public class DebugOptions
