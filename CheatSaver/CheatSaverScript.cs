@@ -6,7 +6,7 @@ namespace CheatSaver
 {
     public class CheatSaverScript : ThunderScript
     {
-        private static string DebugFileName = FileManager.aaModPath + "/CheatSaver/DebugOptions.opt";
+        private static string debugFileName = FileManager.aaModPath + "/CheatSaver/DebugOptions.opt";
         private static DebugOptions debugOptions;
         private bool isFlipped;
 
@@ -14,15 +14,15 @@ namespace CheatSaver
         {
             base.ScriptLoaded(modData);
             debugOptions = new DebugOptions();
-            EventManager.onPossess += onPossessionEvent;
+            EventManager.onPossess += OnPossessionEvent;
             EventManager.onUnpossess += OnUnpossessionEvent;
         }
 
-        private void onPossessionEvent(Creature creature, EventTime eventTime)
+        private void OnPossessionEvent(Creature creature, EventTime eventTime)
         {
             if (eventTime == EventTime.OnEnd)
             {
-                if (!File.Exists(DebugFileName))
+                if (!File.Exists(debugFileName))
                     SaveDebugSettings();
 
                 LoadDebugSettings();
@@ -75,7 +75,7 @@ namespace CheatSaver
             TextReader reader = null;
             try
             {
-                reader = new StreamReader(DebugFileName);
+                reader = new StreamReader(debugFileName);
                 var fileContents = reader.ReadToEnd();
                 options = JsonConvert.DeserializeObject<DebugOptions>(fileContents);
             }
@@ -125,7 +125,7 @@ namespace CheatSaver
             try
             {
                 var contents = JsonConvert.SerializeObject(debugOptions);
-                writer = new StreamWriter(DebugFileName);
+                writer = new StreamWriter(debugFileName);
                 writer.Write(contents);
             }
             finally
