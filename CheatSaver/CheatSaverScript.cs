@@ -51,18 +51,21 @@ namespace CheatSaver
 
         private static bool DebugSettingsChanged()
         {
-            return debugOptions.invincibility != Player.invincibility ||
-                debugOptions.infiniteMana != Mana.infiniteMana ||
-                debugOptions.infiniteFocus != Mana.infiniteFocus ||
-                debugOptions.infiniteImbue != Imbue.infiniteImbue ||
-                debugOptions.infiniteArrows != ItemModuleBow.forceAutoSpawnArrow ||
-                debugOptions.fallDamage != Player.fallDamage ||
-                debugOptions.selfCollision != Player.selfCollision ||
-                debugOptions.armorDetection != Creature.meshRaycast ||
-                debugOptions.slowMotionScale != Player.currentCreature.mana.GetPowerSlowTime().scale ||
-                debugOptions.collisionMarkers != GameManager.local.collisionDebug ||
-                debugOptions.easyDismemberment != Damager.easyDismemberment ||
-                debugOptions.climbFree != RagdollHandClimb.climbFree;
+            return debugOptions.invincibility != Player.invincibility
+                || debugOptions.instantSpellcasting != Mana.fastCast
+                || debugOptions.infiniteFocus != Mana.infiniteFocus
+                || debugOptions.infiniteImbue != Imbue.infiniteImbue
+                || debugOptions.infiniteArrows != ItemModuleBow.forceAutoSpawnArrow
+                || debugOptions.bottomlessQuivers != Holder.infiniteSupply
+                || debugOptions.freeClimb != RagdollHandClimb.climbFree
+                || debugOptions.easyDismemberment != Damager.easyDismemberment
+                || debugOptions.fallDamage != Player.fallDamage
+                || debugOptions.armorDetection != Creature.meshRaycast
+                || debugOptions.slowMotionScale != Player.currentCreature.mana.GetPowerSlowTime().scale
+                || debugOptions.selfCollision != Player.selfCollision
+                || debugOptions.useBreakables != Breakable.AllowBreaking
+                || debugOptions.collisionMarkers != GameManager.local.collisionDebug;
+                
         }
 
         private static void LoadDebugSettings()
@@ -85,34 +88,38 @@ namespace CheatSaver
             if (options != null)
             {
                 Player.invincibility = options.invincibility;
-                Mana.infiniteMana = options.infiniteMana;
+                Mana.fastCast = options.instantSpellcasting;
                 Mana.infiniteFocus = options.infiniteFocus;
                 Imbue.infiniteImbue = options.infiniteImbue;
                 ItemModuleBow.forceAutoSpawnArrow = options.infiniteArrows;
-                Player.fallDamage = options.fallDamage;
-                Player.selfCollision = options.selfCollision;
-                Creature.meshRaycast = options.armorDetection;
-                GameManager.local.collisionDebug = options.collisionMarkers;
-                Player.currentCreature.mana.GetPowerSlowTime().scale = options.slowMotionScale;
-                RagdollHandClimb.climbFree = options.climbFree;
+                Holder.infiniteSupply = options.bottomlessQuivers;
+                RagdollHandClimb.climbFree = options.freeClimb;
                 Damager.easyDismemberment = options.easyDismemberment;
+                Player.fallDamage = options.fallDamage;
+                Creature.meshRaycast = options.armorDetection;
+                Player.currentCreature.mana.GetPowerSlowTime().scale = options.slowMotionScale;
+                Player.selfCollision = options.selfCollision;
+                Breakable.AllowBreaking = options.useBreakables;
+                GameManager.local.collisionDebug = options.collisionMarkers;
             }
         }
 
         private static void SaveDebugSettings()
         {
             debugOptions.invincibility = Player.invincibility;
-            debugOptions.infiniteMana = Mana.infiniteMana;
+            debugOptions.instantSpellcasting = Mana.fastCast;
             debugOptions.infiniteFocus = Mana.infiniteFocus;
             debugOptions.infiniteImbue = Imbue.infiniteImbue;
             debugOptions.infiniteArrows = ItemModuleBow.forceAutoSpawnArrow;
+            debugOptions.bottomlessQuivers = Holder.infiniteSupply;
+            debugOptions.freeClimb = RagdollHandClimb.climbFree;
+            debugOptions.easyDismemberment = Damager.easyDismemberment;
             debugOptions.fallDamage = Player.fallDamage;
-            debugOptions.selfCollision = Player.selfCollision;
             debugOptions.armorDetection = Creature.meshRaycast;
             debugOptions.slowMotionScale = Player.currentCreature.mana.GetPowerSlowTime().scale;
+            debugOptions.selfCollision = Player.selfCollision;
+            debugOptions.useBreakables = Breakable.AllowBreaking;
             debugOptions.collisionMarkers = GameManager.local.collisionDebug;
-            debugOptions.climbFree = RagdollHandClimb.climbFree;
-            debugOptions.easyDismemberment = Damager.easyDismemberment;
 
             TextWriter writer = null;
             try
